@@ -1,0 +1,8 @@
+dill
+numpy
+scipy
+tqdm
+gym
+ipython
+pygame
+ipywidgets
