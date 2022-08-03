@@ -958,6 +958,7 @@ class OvercookedGridworld(object):
             "all_orders" : start_all_orders,
             **kwargs
         }
+        # print(self.recipe_config)
         Recipe.configure(self.recipe_config)
 
     #####################
