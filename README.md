@@ -42,8 +42,10 @@ git clone https://github.com/Stanford-ILIAD/PantheonRL.git
 cd PantheonRL
 pip install -e .
 ```
-# for Aim Visualization
+### For Aim Visualization
+```
 pip install aim
+```
 
 ### Overcooked Installation
 ```
@@ -79,6 +81,7 @@ For examples on round-robin training followed by partner adaptation, check out t
 For more examples, check out the ```examples/``` [directory](examples/).
 
 ## Aim Visualization
+Convert from logs
 ```
 aim convert tensorboard --logdir ~/newPantheonRL/logs
 aim up
