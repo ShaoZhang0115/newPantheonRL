@@ -29,11 +29,7 @@ In Proceedings of the 36th AAAI Conference on Artificial Intelligence (Demo Trac
 ```
 
 -----
-## Aim Visualization
-```
-aim convert tensorboard --logdir ~/PantheonRL/logs
-aim up
-```
+
 
 ## Installation
 ```
@@ -46,7 +42,8 @@ git clone https://github.com/Stanford-ILIAD/PantheonRL.git
 cd PantheonRL
 pip install -e .
 ```
-
+# for Aim Visualization
+pip install aim
 
 ### Overcooked Installation
 ```
@@ -80,6 +77,12 @@ python3 trainer.py OvercookedMultiEnv-v0 PPO PPO --env-config '{"layout_name":"s
 For examples on round-robin training followed by partner adaptation, check out these [instructions](overcookedgym/OvercookedAdaptPartnerInstructions.md).
 
 For more examples, check out the ```examples/``` [directory](examples/).
+
+## Aim Visualization
+```
+aim convert tensorboard --logdir ~/newPantheonRL/logs
+aim up
+```
 
 ## Web User Interface
 
