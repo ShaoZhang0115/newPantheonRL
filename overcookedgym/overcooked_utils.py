@@ -2,7 +2,7 @@ LAYOUT_LIST = ['corridor', 'five_by_five', 'mdp_test', 'multiplayer_schelling',
                'random0', 'random1', 'random2', 'random3', 'scenario1_s',
                'scenario2', 'scenario2_s', 'scenario3', 'scenario4',
                'schelling', 'schelling_s', 'simple', 'simple_single',
-               'simple_tomato', 'small_corridor', 'unident', 'unident_s']
+               'simple_tomato', 'small_corridor', 'unident', 'unident_s','large_room']
 
 NAME_TRANSLATION = {
     "cramped_room": "simple",

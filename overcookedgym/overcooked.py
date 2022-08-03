@@ -3,7 +3,7 @@ import numpy as np
 from overcooked_ai_py.mdp.actions import Action
 from overcooked_ai_py.mdp.overcooked_mdp import OvercookedGridworld
 from overcooked_ai_py.mdp.overcooked_env import OvercookedEnv
-from overcooked_ai_py.planning.planners import MediumLevelPlanner, NO_COUNTERS_PARAMS
+from overcooked_ai_py.planning.planners import MediumLevelActionManager as MediumLevelPlanner, NO_COUNTERS_PARAMS
 
 from pantheonrl.common.multiagentenv import SimultaneousEnv
 
@@ -29,8 +29,9 @@ class OvercookedMultiEnv(SimultaneousEnv):
 
         self.mdp = OvercookedGridworld.from_layout_name(layout_name=layout_name, rew_shaping_params=rew_shaping_params)
         mlp = MediumLevelPlanner.from_pickle_or_compute(self.mdp, NO_COUNTERS_PARAMS, force_compute=False)
-
-        self.base_env = OvercookedEnv(self.mdp, **DEFAULT_ENV_PARAMS)
+        ### for new feature: AssertionError: OvercookedEnv takes in a OvercookedGridworld generator function. If trying to instantiate directly from a OvercookedGridworld instance, use the OvercookedEnv.from_mdp method
+        self.base_env = OvercookedEnv.from_mdp(self.mdp, **DEFAULT_ENV_PARAMS)
+        # self.base_env = OvercookedEnv(self.mdp, **DEFAULT_ENV_PARAMS)
         self.featurize_fn = lambda x: self.mdp.featurize_state(x, mlp)
 
         if baselines: np.random.seed(0)
@@ -44,7 +45,9 @@ class OvercookedMultiEnv(SimultaneousEnv):
     def _setup_observation_space(self):
         dummy_state = self.mdp.get_standard_start_state()
         obs_shape = self.featurize_fn(dummy_state)[0].shape
-        high = np.ones(obs_shape, dtype=np.float32) * max(self.mdp.soup_cooking_time, self.mdp.num_items_for_soup, 5)
+        #AttributeError: 'OvercookedGridworld' object has no attribute 'soup_cooking_time‘，找不到cooking time，可是旧版里面写死了soup_cooking_time为20
+        high = np.ones(obs_shape, dtype=np.float32) * max(20, self.mdp.recipe_config['num_items_for_soup'], 5)
+        # high = np.ones(obs_shape, dtype=np.float32) * max(self.mdp.soup_cooking_time, self.mdp.num_items_for_soup, 5)
 
         return gym.spaces.Box(high * 0, high, dtype=np.float32)
 
@@ -65,9 +68,8 @@ class OvercookedMultiEnv(SimultaneousEnv):
             joint_action = (alt_action, ego_action)
 
         next_state, reward, done, info = self.base_env.step(joint_action)
-
-        # reward shaping
-        rew_shape = info['shaped_r']
+        # reward shaping 这里返回两个players 取了第一个
+        rew_shape = info['shaped_r_by_agent'][0]
         reward = reward + rew_shape
 
         #print(self.base_env.mdp.state_string(next_state))
